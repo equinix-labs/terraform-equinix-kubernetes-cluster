@@ -111,14 +111,12 @@ variable "workloads" {
   description = "Workloads to apply on provisioning (multiple manifests for a single key should be a comma-separated string)"
   default = {
     cni_cidr             = "192.168.0.0/16"
-    cni_workloads        = "https://projectcalico.docs.tigera.io/archive/v3.25/manifests/tigera-operator.yaml,https://projectcalico.docs.tigera.io/archive/v3.25/manifests/custom-resources.yaml"
+    cni_workloads        = "https://projectcalico.docs.tigera.io/archive/v3.24/manifests/tigera-operator.yaml,https://projectcalico.docs.tigera.io/archive/v3.24/manifests/custom-resources.yaml"
     ceph_common          = "https://raw.githubusercontent.com/rook/rook/release-1.0/cluster/examples/kubernetes/ceph/common.yaml"
     ceph_operator        = "https://raw.githubusercontent.com/rook/rook/release-1.0/cluster/examples/kubernetes/ceph/operator.yaml"
     ceph_cluster_minimal = "https://raw.githubusercontent.com/rook/rook/release-1.0/cluster/examples/kubernetes/ceph/cluster-minimal.yaml"
     ceph_cluster         = "https://raw.githubusercontent.com/rook/rook/release-1.0/cluster/examples/kubernetes/ceph/cluster.yaml"
     open_ebs_operator    = "https://openebs.github.io/charts/openebs-operator-1.2.0.yaml"
-    metallb_namespace    = "https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml"
-    metallb_release      = "https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml" # version 0.12.1+ is not compatible with kubernetes 1.25+
     ingress_controller   = "https://raw.githubusercontent.com/containous/traefik/v1.7/examples/k8s/traefik-ds.yaml"
     nvidia_gpu           = "https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/1.0.0-beta4/nvidia-device-plugin.yml"
     extra                = ""
@@ -137,14 +135,8 @@ variable "control_plane_node_count" {
   default     = 0
 }
 
-variable "ccm_enabled" {
-  type        = bool
-  description = "Whether or not the Equnix Metal CCM will be enabled"
-  default     = false
-}
-
-variable "loadbalancer_type" {
-  type        = string
-  description = "The type of Load Balancer to configure with the Equinix CCM (metallb, kube-vip)"
-  default     = "metallb"
+variable "prerequisites" {
+  type        = list(any)
+  description = "cloud-init configuration that must be run on nodes when they are provisioned.  Must be a list of objects conforming to the `part` schema documented for the `cloudinit_config` resource: https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/cloudinit_config."
+  default     = []
 }

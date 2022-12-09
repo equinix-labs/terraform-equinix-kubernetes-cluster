@@ -51,7 +51,7 @@ variable "configure_ingress" {
 
 variable "skip_workloads" {
   type        = bool
-  description = "Skip Equinix Metal workloads (CSI, MetalLB)"
+  description = "Skip Equinix Metal workloads (CSI)"
 }
 
 variable "plan_primary" {
@@ -69,11 +69,6 @@ variable "count_gpu" {
   description = "Number of GPU nodes."
 }
 
-variable "kubernetes_lb_block" {
-  type        = string
-  description = "CIDR of addresses to assign to the LoadBalancer"
-}
-
 variable "control_plane_node_count" {
   type        = number
   description = "Number of control plane nodes (in addition to the primary controller)"
@@ -89,32 +84,8 @@ variable "workloads" {
   description = "Workloads to be applied during provisioning."
 }
 
-variable "metallb_namespace" {
-  type        = string
-  description = "The namespace where metallb is installed"
-  default     = "metallb-system"
-}
-
-variable "metallb_configmap" {
-  type        = string
-  description = "The name of the metallb configmap to create"
-  default     = "config"
-}
-
-variable "ccm_enabled" {
-  type        = bool
-  description = "Whether or not the Equnix Metal CCM will be enabled"
-  default     = false
-}
-
-variable "ccm_version" {
-  type        = string
-  description = "The semver formatted version of the Equinix Metal CCM"
-  default     = "v3.2.2"
-}
-
-variable "loadbalancer_type" {
-  type        = string
-  description = "The type of Load Balancer to configure with the Equinix CCM"
-  default     = "metallb"
+variable "prerequisites" {
+  type        = list(any)
+  description = "cloud-init configuration that must be run on nodes when they are provisioned.  Must be a list of objects conforming to the `part` schema documented for the `cloudinit_config` resource: https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/cloudinit_config."
+  default     = []
 }

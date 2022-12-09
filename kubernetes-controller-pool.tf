@@ -46,7 +46,6 @@ module "controllers" {
   facility                 = var.facility
   metro                    = var.metro
   cluster_name             = var.cluster_name
-  kubernetes_lb_block      = equinix_metal_reserved_ip_block.kubernetes.cidr_notation
   project_id               = var.metal_create_project ? equinix_metal_project.new_project[0].id : var.project_id
   auth_token               = var.auth_token
   secrets_encryption       = var.secrets_encryption
@@ -56,8 +55,7 @@ module "controllers" {
   skip_workloads           = var.skip_workloads
   control_plane_node_count = var.control_plane_node_count
   ssh_private_key_path     = abspath(local_file.cluster_private_key_pem.filename)
-  ccm_enabled              = var.ccm_enabled
-  loadbalancer_type        = var.loadbalancer_type
+  prerequisites            = var.prerequisites
 
   depends_on = [
     equinix_metal_ssh_key.kubernetes-on-metal # if the primary node is created before the equinix_metal_ssh_key, then the primary node won't be accessible

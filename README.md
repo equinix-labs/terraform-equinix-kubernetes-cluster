@@ -6,10 +6,6 @@ This is a [Terraform](https://registry.terraform.io/providers/equinix/metal/late
 
 This module can be found on the Terraform Registry at <https://registry.terraform.io/modules/equinix/multiarch-k8s/metal/latest>.
 
-This project configures your cluster with:
-
-- [MetalLB](https://metallb.universe.tf/) using Equinix Metal elastic IPs.
-
 ## Requirements
 
 The only required variables are `auth_token` (your [Equinix Metal API](https://metal.equinix.com/developers/api/) key), `count_x86` (the number of x86 devices), and `count_arm` (ARM devices).
@@ -102,8 +98,6 @@ To define custom workloads upon deploy, use the `extra` key in your `workloads` 
     ceph_cluster_minimal = "https://raw.githubusercontent.com/rook/rook/release-1.0/cluster/examples/kubernetes/ceph/cluster-minimal.yaml"
     ceph_cluster         = "https://raw.githubusercontent.com/rook/rook/release-1.0/cluster/examples/kubernetes/ceph/cluster.yaml"
     open_ebs_operator    = "https://openebs.github.io/charts/openebs-operator-1.2.0.yaml"
-    metallb_namespace    = "https://raw.githubusercontent.com/google/metallb/v0.9.3/manifests/namespace.yaml"
-    metallb_release      = "https://raw.githubusercontent.com/google/metallb/v0.9.3/manifests/metallb.yaml"
     ingress_controller   = "https://raw.githubusercontent.com/containous/traefik/v1.7/examples/k8s/traefik-ds.yaml"
     nvidia_gpu           = "https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/1.0.0-beta4/nvidia-device-plugin.yml"
 ...
