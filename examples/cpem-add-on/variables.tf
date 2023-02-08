@@ -16,7 +16,7 @@ variable "metro" {
 }
 
 variable "ssh_key_file" {
-  type = string
+  type        = string
   description = "Path to SSH key file for access to cluster nodes"
 }
 
@@ -36,4 +36,17 @@ variable "cluster_name" {
   type        = string
   description = "Name of your cluster. Alpha-numeric and hyphens only, please."
   default     = "metal-multiarch-k8s"
+}
+variable "private_key_path" {
+  type        = string
+  description = "Path to an SSH key to use for the connection"
+}
+variable "host" {
+  type        = string
+  description = "The address of the server from where to perform kubectl installations and changes"
+}
+variable "user" {
+  type        = string
+  description = "The username of the ssh key used to connect to the server defined in host"
+  default     = "root"
 }
