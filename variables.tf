@@ -6,11 +6,11 @@ variable "project_id" {
 }
 variable "kube_vip_version" {
   type    = string
-  default = "v0.5.5"
+  default = "v0.5.9"
 }
 variable "kubernetes_version" {
   type    = string
-  default = "v1.25.3"
+  default = "v1.26.1"
 }
 variable "cpem_version" {
   type    = string
