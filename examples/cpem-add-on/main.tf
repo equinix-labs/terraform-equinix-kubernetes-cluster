@@ -1,35 +1,20 @@
-module "multiarch-k8s" {
+module "tfk8s" {
   source = "../.."
-  # source  = "equinix/multiarch-k8s/metal"
-  # version = "0.5.0" # Use the latest version, according to https://github.com/equinix/terraform-metal-multiarch-k8s/releases
+  # source  = "equinix-labs/terraform-equinix-kubernetes-cluster?"
+  # version = "0.0.1" # Use the latest version, according to https://github.com/equinix-labs/terraform-equinix-kubernetes-cluster/releases
 
-  auth_token           = var.auth_token
-  project_id           = var.project_id
-  metal_create_project = false
-  metro                = var.metro
-  count_arm            = var.count_arm
-  count_x86            = var.count_x86
-  cluster_name         = var.cluster_name
-  prerequisites        = module.kubernetes_addons.cloud_provider_equinix_metal_prerequisites
+  auth_token         = var.auth_token
+  cpem_version       = var.cpem_version
+  kube_vip_version   = var.kube_vip_version
+  kubernetes_version = var.kubernetes_version
+  project_id         = var.project_id
 }
 
 provider "equinix" {
   auth_token = var.auth_token
 }
 
-output "multiarch-k8s" {
-  value     = module.multiarch-k8s
-  sensitive = true
-}
-
-resource "null_resource" "wait_on_create" {
-  provisioner "local-exec" {
-    # Wait to run add-ons until the cluster is ready for them
-    command = "echo '${module.multiarch-k8s.kubernetes_kubeconfig_file}' && sleep 60"
-  }
-}
-
-module "kubernetes_addons" {
+/* module "kubernetes_addons" {
   # TODO: This assumes the addons are checked out locally in a specific place.  Don't.
   source = "../../../terraform-equinix-kubernetes-addons"
 
@@ -57,3 +42,4 @@ module "kubernetes_addons" {
     }
   }
 }
+ */
