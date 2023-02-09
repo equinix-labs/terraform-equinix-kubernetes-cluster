@@ -1,9 +1,3 @@
-provider "equinix" {
-  # Configuration options
-  auth_token = var.auth_token
-
-}
-
 locals {
   cloud_config_cp_map = {
     AUTH_TOKEN         = var.auth_token
