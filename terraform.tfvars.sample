@@ -1,5 +1,5 @@
 auth_token         = ""
-project_id         = ""
-kubernetes_version = "v1.26.1"
-kube_vip_version   = "v0.5.5"
 cpem_version       = "v3.5.0"
+kube_vip_version   = "v0.5.9"
+kubernetes_version = "v1.26.1"
+project_id         = ""
