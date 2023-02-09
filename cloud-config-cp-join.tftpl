@@ -20,6 +20,7 @@ packages:
 - lsb-release
 - linux-generic
 - jq
+- kubetail
 
 write_files:
 - content: |
@@ -32,9 +33,17 @@ write_files:
     net.bridge.bridge-nf-call-ip6tables = 1
   path: /etc/sysctl.d/99-kubernetes-cri.conf
 - content: |
+    runtime-endpoint: unix:///run/containerd/containerd.sock
+    image-endpoint: unix:///run/containerd/containerd.sock
+  path: /etc/crictl.yaml
+- content: |
     KUBELET_EXTRA_ARGS=--node-ip={{ ds.meta_data.local_ipv4 }}
   path: /etc/default/kubelet
 - content: |
+    apiVersion: kubelet.config.k8s.io/v1beta1
+    kind: KubeletConfiguration
+    cgroupDriver: systemd
+    ---
     apiVersion: kubeadm.k8s.io/v1beta3
     kind: JoinConfiguration
     nodeRegistration:
@@ -54,7 +63,7 @@ write_files:
   path: /root/kubeadm.join.yaml
 
 runcmd:
-- | 
+- |
   sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab
   swapoff -a
   mount -a
@@ -67,10 +76,6 @@ runcmd:
   apt-get install -y containerd.io kubelet=$${RESOLVED_KUBERNETES_VERSION} kubeadm=$${RESOLVED_KUBERNETES_VERSION} kubectl=$${RESOLVED_KUBERNETES_VERSION}
   apt-mark hold kubelet kubeadm kubectl
   containerd config default > /etc/containerd/config.toml
-  cat  <<EOF > /etc/crictl.yaml
-  runtime-endpoint: unix:///run/containerd/containerd.sock
-  image-endpoint: unix:///run/containerd/containerd.sock
-  EOF
   sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
   sed -i "s,sandbox_image.*$,sandbox_image = \"$(kubeadm config images list | grep pause | sort -r | head -n1)\"," /etc/containerd/config.toml
   systemctl restart containerd
@@ -82,20 +87,20 @@ runcmd:
   done
   ctr image pull ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION}
   ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION} vip /kube-vip manifest pod \
-  --interface lo \
-  --vip ${VIP} \
+  --interface "lo" \
+  --vip "${VIP}" \
   --controlplane \
   --bgp \
   --peerAS $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_as') \
   --peerAddress $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_ips[0]') \
   --localAS $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].customer_as') \
   --bgpRouterID $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].customer_ip') > /etc/kubernetes/manifests/vip.yaml
-  mkdir -p $HOME/.kube
-  cp /etc/kubernetes/admin.conf $HOME/.kube/config
-  echo "source <(kubectl completion bash)" >> $HOME/.bashrc
-  echo "alias k=kubectl" >> $HOME/.bashrc
-  echo "complete -o default -F __start_kubectl k" >> $HOME/.bashrc
   rm /run/metadata.json
+  mkdir -p /root/.kube && cp -f /etc/kubernetes/admin.conf /root/.kube/config
+  cp /etc/kubernetes/admin.conf /root/.kube/config
+  echo "source <(kubectl completion bash)" >> /root/.bashrc
+  echo "alias k=kubectl" >> /root/.bashrc
+  echo "complete -o default -F __start_kubectl k" >> /root/.bashrc
 
 power_state: 
   mode: false
