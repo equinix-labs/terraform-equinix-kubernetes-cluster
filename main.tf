@@ -70,3 +70,14 @@ resource "equinix_metal_reserved_ip_block" "k8s-cluster1-pool1-cp1" {
   quantity   = 1
 }
 
+resource "tls_private_key" "ssh_key_pair" {
+  algorithm = "ED25519"
+  count     = var.ssh_private_key_path == "" ? 1 : 0
+}
+
+resource "equinix_metal_project_ssh_key" "ssh_key_pair" {
+  count      = var.ssh_private_key_path == "" ? 1 : 0
+  name       = "ssh_key_pair"
+  project_id = var.project_id
+  public_key = tls_private_key.ssh_key_pair[count.index].public_key_openssh
+}

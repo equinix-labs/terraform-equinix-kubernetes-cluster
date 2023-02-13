@@ -19,3 +19,9 @@ variable "project_id" {
   sensitive = true
   type      = string
 }
+
+variable "ssh_private_key_path" {
+  sensitive = true
+  type      = string
+  default   = ""
+}
