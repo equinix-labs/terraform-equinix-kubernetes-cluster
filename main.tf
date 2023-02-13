@@ -81,3 +81,20 @@ resource "equinix_metal_project_ssh_key" "ssh_key_pair" {
   project_id = var.project_id
   public_key = tls_private_key.ssh_key_pair[count.index].public_key_openssh
 }
+resource "local_sensitive_file" "ssh_private_key_file" {
+  content         = tls_private_key.ssh_key_pair[0].private_key_openssh
+  filename        = "test.txt"
+  file_permission = "0600"
+  count           = var.ssh_private_key_path == "" ? 1 : 0
+}
+resource "null_resource" "kubeconfig" {
+  provisioner "local-exec" {
+    command = join("", ["scp -i ", local_sensitive_file.ssh_private_key_file[0].filename, " root@", equinix_metal_reserved_ip_block.k8s-cluster1-pool1-cp1.address, ":/etc/kubernetes/admin.conf ./kubeconfig.admin.yaml"])
+  }
+
+  provisioner "local-exec" {
+    command = "echo 'Cluster SSH Key: ${local_sensitive_file.ssh_private_key_file[0].filename}\nKubeconfig file: ./kubeconfig.admin.yaml'"
+
+  }
+
+}
