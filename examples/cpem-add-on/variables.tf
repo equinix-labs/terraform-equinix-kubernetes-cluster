@@ -6,7 +6,6 @@ variable "cpem_version" {
   type    = string
   default = "v3.5.0"
 }
-
 variable "kube_vip_version" {
   type    = string
   default = "v0.5.9"
