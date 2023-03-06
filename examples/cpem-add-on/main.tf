@@ -1,32 +1,17 @@
-module "multiarch-k8s" {
+module "tfk8s" {
   source = "../.."
-  # source  = "equinix/multiarch-k8s/metal"
-  # version = "0.5.0" # Use the latest version, according to https://github.com/equinix/terraform-metal-multiarch-k8s/releases
+  # source  = "equinix-labs/terraform-equinix-kubernetes-cluster?"
+  # version = "0.0.1" # Use the latest version, according to https://github.com/equinix-labs/terraform-equinix-kubernetes-cluster/releases
 
-  auth_token           = var.auth_token
-  project_id           = var.project_id
-  metal_create_project = false
-  metro                = var.metro
-  count_arm            = var.count_arm
-  count_x86            = var.count_x86
-  cluster_name         = var.cluster_name
-  prerequisites        = module.kubernetes_addons.cloud_provider_equinix_metal_prerequisites
+  auth_token         = var.auth_token
+  cpem_version       = var.cpem_version
+  kube_vip_version   = var.kube_vip_version
+  kubernetes_version = var.kubernetes_version
+  project_id         = var.project_id
 }
 
 provider "equinix" {
   auth_token = var.auth_token
-}
-
-output "multiarch-k8s" {
-  value     = module.multiarch-k8s
-  sensitive = true
-}
-
-resource "null_resource" "wait_on_create" {
-  provisioner "local-exec" {
-    # Wait to run add-ons until the cluster is ready for them
-    command = "echo '${module.multiarch-k8s.kubernetes_kubeconfig_file}' && sleep 60"
-  }
 }
 
 module "kubernetes_addons" {
@@ -34,26 +19,25 @@ module "kubernetes_addons" {
   source = "../../../terraform-equinix-kubernetes-addons"
 
   ssh_user        = "root"
-  ssh_private_key = chomp(file(var.ssh_key_file))
-  ssh_host        = module.multiarch-k8s.kubernetes_api_address
+  ssh_private_key = var.ssh_private_key_path == "" ? join("\n", [chomp(module.tfk8s.ssh_key_pair[0].private_key_openssh), ""]) : chomp(file(var.ssh_private_key_path))
+  ssh_host        = module.tfk8s.kubeapi-vip
 
   # Wait to run add-ons until the cluster is ready for them
-  kubeconfig_remote_path = null_resource.wait_on_create.id == "" ? "" : "/etc/kubernetes/admin.conf"
-  
+  kubeconfig_remote_path = "/etc/kubernetes/admin.conf"
+
   # TODO: These aren't used for CPEM add-on but we have to provide them
-  equinix_metro         = var.metro
+  equinix_metro         = "DA"
   equinix_project       = var.project_id
   kubeconfig_local_path = ""
 
-  enable_metallb = true
+  enable_metallb                      = false
   enable_cloud_provider_equinix_metal = true
   cloud_provider_equinix_metal_config = {
-    version      = "v3.5.0"
+    version = "v3.5.0"
     secret = {
       projectID    = var.project_id
       apiKey       = var.auth_token
-      loadbalancer = "metallb:///"
-      #metro        = var.metro # TODO worth having an example of globally-specified metro?
+      loadbalancer = "kube-vip://"
     }
   }
 }

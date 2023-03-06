@@ -1,0 +1,114 @@
+## template: jinja
+#cloud-config
+apt:
+  sources: 
+    docker.list:
+      source: deb [arch=amd64] https://download.docker.com/linux/ubuntu $RELEASE stable
+      keyid: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    kubernetes.list:
+      source: deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main
+      keyid: A362B822F6DEDC652817EA46B53DC80D13EDEF05
+
+package_upgrade: false
+package_reboot_if_required: false
+
+packages:
+- apt-transport-https
+- ca-certificates
+- curl
+- gnupg
+- lsb-release
+- linux-generic
+- jq
+- kubetail
+
+write_files:
+- content: |
+    overlay
+    br_netfilter
+  path: /etc/modules-load.d/k8s.conf
+- content: |
+    net.bridge.bridge-nf-call-iptables  = 1
+    net.ipv4.ip_forward                 = 1
+    net.bridge.bridge-nf-call-ip6tables = 1
+  path: /etc/sysctl.d/99-kubernetes-cri.conf
+- content: |
+    runtime-endpoint: unix:///run/containerd/containerd.sock
+    image-endpoint: unix:///run/containerd/containerd.sock
+  path: /etc/crictl.yaml
+- content: |
+    KUBELET_EXTRA_ARGS=--node-ip={{ ds.meta_data.local_ipv4 }}
+  path: /etc/default/kubelet
+- content: |
+    apiVersion: kubelet.config.k8s.io/v1beta1
+    kind: KubeletConfiguration
+    cgroupDriver: systemd
+    ---
+    apiVersion: kubeadm.k8s.io/v1beta3
+    kind: InitConfiguration
+    localAPIEndpoint:
+      advertiseAddress: {{ ds.meta_data.local_ipv4 }}
+      bindPort: 6443
+    nodeRegistration:
+      kubeletExtraArgs:
+        cloud-provider: "external"
+      taints: null
+    bootstrapTokens:
+    - token: "8in490.ru91gdlo4hy0xhfz"
+    certificateKey: "a43fc409b03da366a769d8b7b3fc6c5f5a8503a7db6b223351f97a16822415ff"
+    ---
+    apiVersion: kubeadm.k8s.io/v1beta3
+    kind: ClusterConfiguration
+    apiServer:
+      timeoutForControlPlane: 4m0s
+    certificatesDir: /etc/kubernetes/pki
+    controlPlaneEndpoint: ${VIP}:6443
+    kubernetesVersion: ${KUBERNETES_VERSION}
+    networking:
+      podSubnet: 10.244.0.0/16
+    ---
+  path: /root/kubeadm.init.yaml
+
+runcmd:
+- |
+  sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab
+  swapoff -a
+  mount -a
+  modprobe overlay
+  modprobe br_netfilter
+  sysctl --system
+  export DEBIAN_FRONTEND=noninteractive
+  TRIMMED_KUBERNETES_VERSION=$(echo ${KUBERNETES_VERSION} | sed 's/\./\\\\./g' | sed 's/^v//')
+  RESOLVED_KUBERNETES_VERSION=$(apt-cache madison kubelet | awk -v VERSION=$${TRIMMED_KUBERNETES_VERSION} '$3~ VERSION { print $3 }' | head -n1)
+  apt-get install -y containerd.io kubelet=$${RESOLVED_KUBERNETES_VERSION} kubeadm=$${RESOLVED_KUBERNETES_VERSION} kubectl=$${RESOLVED_KUBERNETES_VERSION}
+  apt-mark hold kubelet kubeadm kubectl
+  containerd config default > /etc/containerd/config.toml
+  sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+  sed -i "s,sandbox_image.*$,sandbox_image = \"$(kubeadm config images list | grep pause | sort -r | head -n1)\"," /etc/containerd/config.toml
+  systemctl restart containerd
+  ip addr add ${VIP} dev lo
+  curl -o /run/metadata.json --retry 10 -fsSL https://metadata.platformequinix.com/metadata
+  for i in $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_ips[]'); do
+    ip route add $i via $(cat /run/metadata.json | jq -r '.network.addresses[] | select(.public == false and .address_family == 4) | .gateway')
+  done
+  ctr image pull ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION}
+  ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION} vip /kube-vip manifest pod \
+  --interface "lo" \
+  --vip "${VIP}" \
+  --controlplane \
+  --bgp \
+  --peerAS $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_as') \
+  --peerAddress $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_ips[0]') \
+  --localAS $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].customer_as') \
+  --bgpRouterID $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].customer_ip') > /etc/kubernetes/manifests/vip.yaml
+  systemctl enable kubelet.service
+  kubeadm init --config=/root/kubeadm.init.yaml --upload-certs
+  rm /run/metadata.json
+  mkdir -p /root/.kube && cp -f /etc/kubernetes/admin.conf /root/.kube/config
+  cp /etc/kubernetes/admin.conf /root/.kube/config
+  echo "source <(kubectl completion bash)" >> /root/.bashrc
+  echo "alias k=kubectl" >> /root/.bashrc
+  echo "complete -o default -F __start_kubectl k" >> /root/.bashrc
+
+power_state: 
+  mode: false
