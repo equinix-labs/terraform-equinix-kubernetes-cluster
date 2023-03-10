@@ -30,7 +30,7 @@ jobs:
         working-directory: ./examples/simple
     steps:
     - name: Checkout from Github
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Add SHORT_SHA env property with commit short sha
       run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
