@@ -42,7 +42,7 @@ jobs:
       id: init
       run: terraform init -input=false
     - id: project
-      uses: displague/metal-project-action@v0.5.0
+      uses: displague/metal-project-action@v0.10.0
       env:
         METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
     - name: Terraform Vars - Cluster Name
