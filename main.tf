@@ -11,7 +11,7 @@ locals {
 resource "equinix_metal_device" "k8s-cluster1-pool1-cp1" {
   hostname         = "k8s-cluster1-pool1-cp1"
   plan             = "m3.small.x86"
-  metro            = "da"
+  metro            = var.metro
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = var.project_id
@@ -23,7 +23,7 @@ resource "equinix_metal_device" "k8s-cluster1-pool1-cpx" {
   count            = 2
   hostname         = "k8s-cluster1-pool1-cp${count.index + 2}"
   plan             = "m3.small.x86"
-  metro            = "da"
+  metro            = var.metro
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = var.project_id
@@ -34,7 +34,7 @@ resource "equinix_metal_device" "k8s-cluster1-pool1-workerx" {
   count            = 1
   hostname         = "k8s-cluster1-pool1-worker${count.index}"
   plan             = "m3.small.x86"
-  metro            = "da"
+  metro            = var.metro
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = var.project_id
@@ -66,7 +66,7 @@ resource "equinix_metal_port" "k8s-cpx" {
 
 resource "equinix_metal_reserved_ip_block" "k8s-cluster1-pool1-cp1" {
   project_id = var.project_id
-  metro      = "da"
+  metro      = var.metro
   quantity   = 1
 }
 
