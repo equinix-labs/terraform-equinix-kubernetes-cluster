@@ -83,7 +83,7 @@ resource "equinix_metal_project_ssh_key" "ssh_key_pair" {
 }
 resource "local_sensitive_file" "ssh_private_key_file" {
   content         = tls_private_key.ssh_key_pair[0].private_key_openssh
-  filename        = "test.txt"
+  filename        = "ssh_key"
   file_permission = "0600"
   count           = var.ssh_private_key_path == "" ? 1 : 0
 }
