@@ -87,7 +87,33 @@ resource "local_sensitive_file" "ssh_private_key_file" {
   file_permission = "0600"
   count           = var.ssh_private_key_path == "" ? 1 : 0
 }
+
+resource "null_resource" "wait_for_cloud_init" {
+  depends_on = [
+    local_sensitive_file.ssh_private_key_file,
+    equinix_metal_reserved_ip_block.k8s-cluster1-pool1-cp1,
+    equinix_metal_port.k8s-cp1,
+    equinix_metal_bgp_session.k8s-cluster1-pool1-cp1,
+    equinix_metal_device.k8s-cluster1-pool1-cp1
+  ]
+
+  connection {
+    type        = "ssh"
+    user        = "root"
+    host        = equinix_metal_device.k8s-cluster1-pool1-cp1.network[0].address
+    private_key = chomp(tls_private_key.ssh_key_pair[0].private_key_pem)
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait"
+    ]
+  }
+}
+
 resource "null_resource" "kubeconfig" {
+  depends_on = [
+    null_resource.wait_for_cloud_init,
+  ]
   provisioner "local-exec" {
     command = join("", ["scp -i ", local_sensitive_file.ssh_private_key_file[0].filename, " root@", equinix_metal_reserved_ip_block.k8s-cluster1-pool1-cp1.address, ":/etc/kubernetes/admin.conf ./kubeconfig.admin.yaml"])
   }
