@@ -16,7 +16,7 @@ write_files:
     image-endpoint: unix:///run/containerd/containerd.sock
   path: /etc/crictl.yaml
 - content: |
-    KUBELET_EXTRA_ARGS=--node-ip={{ ds.meta_data.local_ipv4 }}
+    KUBELET_EXTRA_ARGS=--node-ip={{ ds.meta_data.local_ipv4 }} --cloud-provider=external
   path: /etc/default/kubelet
 - content: |
     apiVersion: kubelet.config.k8s.io/v1beta1
@@ -50,6 +50,7 @@ write_files:
 
 runcmd:
 - |
+  sleep 10
   sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab
   swapoff -a
   mount -a
@@ -79,8 +80,8 @@ runcmd:
   for i in $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_ips[]'); do
     ip route add $i via $(cat /run/metadata.json | jq -r '.network.addresses[] | select(.public == false and .address_family == 4) | .gateway')
   done
-  ctr image pull ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION}
-  ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION} vip /kube-vip manifest pod \
+    ctr image pull ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION}
+    ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION} vip /kube-vip manifest pod \
   --interface "lo" \
   --address "${VIP}" \
   --controlplane \
