@@ -1,4 +1,4 @@
-name: 'integration'
+name: "integration"
 # This workflow intends to verify that the module provisions
 # successfully for all software and infrastructure defined.
 # https://learn.hashicorp.com/tutorials/terraform/automate-terraform
@@ -6,8 +6,8 @@ name: 'integration'
 on:
   push:
     paths-ignore:
-      - 'LICENSE'
-      - '**.md'
+      - "LICENSE"
+      - "**.md"
 
 jobs:
   integrate:
@@ -24,46 +24,46 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        tf: [1.3]
+        tf: [1.5]
     defaults:
       run:
         working-directory: ./examples/simple
     steps:
-    - name: Checkout from Github
-      uses: actions/checkout@v3
-    - name: Add SHORT_SHA env property with commit short sha
-      run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      - name: Checkout from Github
+        uses: actions/checkout@v3
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
-    - name: Install Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: ${{ env.TF_VERSION }}
-    - name: Initialize Terraform, Modules, and Plugins
-      id: init
-      run: terraform init -input=false
-    - id: project
-      uses: equinix-labs/metal-project-action@v0.13.0
-      env:
-        METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
-    - name: Terraform Vars - Cluster Name
-      run:  echo "TF_VAR_cluster_name=tfacc-${SHORT_SHA}" >> $GITHUB_ENV
-    - name: Terraform Vars - Project ID
-      run: echo "TF_VAR_project_id=${{ steps.project.outputs.projectID }}" >> $GITHUB_ENV
-    - name: Terraform Plan
-      id: plan
-      timeout-minutes: 45
-      run: terraform plan -out=tfplan -input=false
-    - name: Terraform Apply
-      id: apply
-      timeout-minutes: 45
-      run: terraform apply -input=false tfplan
-    - name: Terraform Destroy
-      id: destroy
-      if: ${{ always() }}
-      run: terraform destroy -input=false -auto-approve
-    - name: Project Delete
-      if: ${{ always() }}
-      uses: equinix-labs/metal-sweeper-action@v0.6.0
-      env:
-        METAL_PROJECT_ID: ${{ steps.project.outputs.projectID }}
-        METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - name: Initialize Terraform, Modules, and Plugins
+        id: init
+        run: terraform init -input=false
+      - id: project
+        uses: equinix-labs/metal-project-action@v0.13.0
+        env:
+          METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
+      - name: Terraform Vars - Cluster Name
+        run: echo "TF_VAR_cluster_name=tfacc-${SHORT_SHA}" >> $GITHUB_ENV
+      - name: Terraform Vars - Project ID
+        run: echo "TF_VAR_project_id=${{ steps.project.outputs.projectID }}" >> $GITHUB_ENV
+      - name: Terraform Plan
+        id: plan
+        timeout-minutes: 45
+        run: terraform plan -out=tfplan -input=false
+      - name: Terraform Apply
+        id: apply
+        timeout-minutes: 45
+        run: terraform apply -input=false tfplan
+      - name: Terraform Destroy
+        id: destroy
+        if: ${{ always() }}
+        run: terraform destroy -input=false -auto-approve
+      - name: Project Delete
+        if: ${{ always() }}
+        uses: equinix-labs/metal-sweeper-action@v0.6.0
+        env:
+          METAL_PROJECT_ID: ${{ steps.project.outputs.projectID }}
+          METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
