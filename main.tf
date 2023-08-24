@@ -20,7 +20,7 @@ resource "equinix_metal_device" "k8s-cluster1-pool1-cp1" {
 }
 
 resource "equinix_metal_device" "k8s-cluster1-pool1-cpx" {
-  count            = 2
+  count            = var.cp_count - 1
   hostname         = "k8s-cluster1-pool1-cp${count.index + 2}"
   plan             = "m3.small.x86"
   metro            = var.metro

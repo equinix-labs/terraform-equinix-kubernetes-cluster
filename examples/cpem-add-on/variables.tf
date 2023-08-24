@@ -4,25 +4,34 @@ variable "auth_token" {
 }
 variable "cpem_version" {
   type    = string
-  default = "v3.5.0"
+  default = "v3.6.2"
 }
 variable "kube_vip_version" {
   type    = string
-  default = "v0.5.9"
+  default = "v0.6.2"
 }
 variable "kubernetes_version" {
   type    = string
-  default = "v1.26.1"
+  default = "v1.27.5"
 }
 variable "project_id" {
   sensitive = true
   type      = string
 }
 variable "metro" {
-  type      = string
+  type = string
 }
 variable "ssh_private_key_path" {
   sensitive = true
   type      = string
   default   = ""
+}
+variable "cp_count" {
+  type    = number
+  default = 1
+}
+
+variable "worker_count" {
+  type    = number
+  default = 1
 }
