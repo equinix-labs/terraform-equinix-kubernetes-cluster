@@ -27,3 +27,8 @@ variable "ssh_private_key_path" {
   type      = string
   default   = ""
 }
+
+variable "worker_count" {
+  type    = number
+  default = 1
+}

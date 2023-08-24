@@ -31,7 +31,7 @@ resource "equinix_metal_device" "k8s-cluster1-pool1-cpx" {
   tags             = ["k8s-cluster-cluster1", "k8s-nodepool-pool1"]
 }
 resource "equinix_metal_device" "k8s-cluster1-pool1-workerx" {
-  count            = 1
+  count            = var.worker_count
   hostname         = "k8s-cluster1-pool1-worker${count.index}"
   plan             = "m3.small.x86"
   metro            = var.metro
