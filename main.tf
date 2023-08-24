@@ -20,7 +20,7 @@ resource "equinix_metal_device" "k8s-cluster1-pool1-cp1" {
 }
 
 resource "equinix_metal_device" "k8s-cluster1-pool1-cpx" {
-  count            = var.cp_count - 1
+  count            = var.cp_ha == true ? 2 : 0
   hostname         = "k8s-cluster1-pool1-cp${count.index + 2}"
   plan             = "m3.small.x86"
   metro            = var.metro
@@ -32,7 +32,7 @@ resource "equinix_metal_device" "k8s-cluster1-pool1-cpx" {
 }
 resource "equinix_metal_device" "k8s-cluster1-pool1-workerx" {
   count            = var.worker_count
-  hostname         = "k8s-cluster1-pool1-worker${count.index}"
+  hostname         = "k8s-cluster1-pool1-worker${count.index + 1}"
   plan             = "m3.small.x86"
   metro            = var.metro
   operating_system = "ubuntu_20_04"
@@ -48,7 +48,7 @@ resource "equinix_metal_bgp_session" "k8s-cluster1-pool1-cp1" {
 }
 
 resource "equinix_metal_bgp_session" "k8s-cluster1-pool1-cpx" {
-  count          = 2
+  count          = var.cp_ha == true ? 2 : 0
   device_id      = equinix_metal_device.k8s-cluster1-pool1-cpx[count.index].id
   address_family = "ipv4"
 }
@@ -59,7 +59,7 @@ resource "equinix_metal_port" "k8s-cp1" {
 }
 
 resource "equinix_metal_port" "k8s-cpx" {
-  count   = 2
+  count   = var.cp_ha == true ? 2 : 0
   port_id = [for p in equinix_metal_device.k8s-cluster1-pool1-cpx[count.index].ports : p.id if p.name == "bond0"][0]
   bonded  = true
 }

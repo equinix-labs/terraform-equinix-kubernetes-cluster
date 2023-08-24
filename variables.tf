@@ -27,9 +27,9 @@ variable "ssh_private_key_path" {
   type      = string
   default   = ""
 }
-variable "cp_count" {
-  type    = number
-  default = 1
+variable "cp_ha" {
+  type    = bool
+  default = true
 }
 variable "worker_count" {
   type    = number

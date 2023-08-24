@@ -7,7 +7,7 @@ module "tfk8s" {
   kube_vip_version   = var.kube_vip_version
   kubernetes_version = var.kubernetes_version
   project_id         = var.project_id
-  cp_count           = var.cp_count
+  cp_ha              = var.cp_ha
   worker_count       = var.worker_count
   metro              = var.metro
 }
