@@ -115,7 +115,7 @@ resource "null_resource" "kubeconfig" {
     null_resource.wait_for_cloud_init,
   ]
   provisioner "local-exec" {
-    command = join("", ["scp -i ", local_sensitive_file.ssh_private_key_file[0].filename, " root@", equinix_metal_reserved_ip_block.k8s-cluster1-pool1-cp1.address, ":/etc/kubernetes/admin.conf ./kubeconfig.admin.yaml"])
+    command = join("", ["scp -o StrictHostKeyChecking=no -i ", local_sensitive_file.ssh_private_key_file[0].filename, " root@", equinix_metal_reserved_ip_block.k8s-cluster1-pool1-cp1.address, ":/etc/kubernetes/admin.conf ./kubeconfig.admin.yaml"])
   }
 
   provisioner "local-exec" {
