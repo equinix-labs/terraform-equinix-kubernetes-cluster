@@ -12,9 +12,17 @@ write_files:
     net.bridge.bridge-nf-call-ip6tables = 1
   path: /etc/sysctl.d/99-kubernetes-cri.conf
 - content: |
+    runtime-endpoint: unix:///run/containerd/containerd.sock
+    image-endpoint: unix:///run/containerd/containerd.sock
+  path: /etc/crictl.yaml
+- content: |
     KUBELET_EXTRA_ARGS=--node-ip={{ ds.meta_data.local_ipv4 }} --cloud-provider=external
   path: /etc/default/kubelet
 - content: |
+    apiVersion: kubelet.config.k8s.io/v1beta1
+    kind: KubeletConfiguration
+    cgroupDriver: systemd
+    ---
     apiVersion: kubeadm.k8s.io/v1beta3
     kind: JoinConfiguration
     nodeRegistration:
@@ -26,6 +34,11 @@ write_files:
         token: "8in490.ru91gdlo4hy0xhfz"
         apiServerEndpoint: ${VIP}:6443
         unsafeSkipCAVerification: true
+    controlPlane:
+      localAPIEndpoint:
+        advertiseAddress: {{ ds.meta_data.local_ipv4 }}
+        bindPort: 6443
+      certificateKey: "a43fc409b03da366a769d8b7b3fc6c5f5a8503a7db6b223351f97a16822415ff"
   path: /root/kubeadm.join.yaml
 
 runcmd:
@@ -57,6 +70,25 @@ runcmd:
   systemctl restart containerd
   systemctl enable kubelet.service
   kubeadm join --config=/root/kubeadm.join.yaml
+  curl -o /run/metadata.json --retry 10 -fsSL https://metadata.platformequinix.com/metadata
+  for i in $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_ips[]'); do
+    ip route add $i via $(cat /run/metadata.json | jq -r '.network.addresses[] | select(.public == false and .address_family == 4) | .gateway')
+  done
+  ctr image pull ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION}
+  ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:${KUBE_VIP_VERSION} vip /kube-vip manifest pod \
+  --interface "lo" \
+  --address "${VIP}" \
+  --controlplane \
+  --bgp \
+  --localAS $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].customer_as') \
+  --bgpRouterID $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].customer_ip') \
+  --bgppeers $(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_ips[0]'):$(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_as'),$(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_ips[1]'):$(cat /run/metadata.json | jq -r '.bgp_neighbors[0].peer_as') > /etc/kubernetes/manifests/vip.yaml
+  rm /run/metadata.json
+  mkdir -p /root/.kube && cp -f /etc/kubernetes/admin.conf /root/.kube/config
+  cp /etc/kubernetes/admin.conf /root/.kube/config
+  echo "source <(kubectl completion bash)" >> /root/.bashrc
+  echo "alias k=kubectl" >> /root/.bashrc
+  echo "complete -o default -F __start_kubectl k" >> /root/.bashrc
 
-power_state: 
+power_state:
   mode: false
