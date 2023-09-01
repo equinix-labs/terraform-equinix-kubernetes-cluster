@@ -43,8 +43,8 @@ jobs:
         run: terraform init -input=false
       - id: project
         uses: equinix-labs/metal-project-action@v0.13.0
-        env:
-          METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
+        with:
+          userToken: ${{ secrets.METAL_AUTH_TOKEN }}
       - name: Terraform Vars - Cluster Name
         run: echo "TF_VAR_cluster_name=tfacc-${SHORT_SHA}" >> $GITHUB_ENV
       - name: Terraform Vars - Project ID
