@@ -27,7 +27,7 @@ jobs:
         tf: [1.5]
     defaults:
       run:
-        working-directory: ./examples/simple
+        working-directory: ./examples/cpem-add-on
     steps:
       - name: Checkout from Github
         uses: actions/checkout@v3

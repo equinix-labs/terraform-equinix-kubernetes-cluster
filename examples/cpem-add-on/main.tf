@@ -22,7 +22,7 @@ module "kubernetes_addons" {
 
   ssh_user        = "root"
   ssh_private_key = var.ssh_private_key_path == "" ? join("\n", [chomp(module.tfk8s.ssh_key_pair[0].private_key_openssh), ""]) : chomp(file(var.ssh_private_key_path))
-  ssh_host        = module.tfk8s.kubeapi-vip
+  ssh_host        = module.tfk8s.kubeapi_vip
 
   # Wait to run add-ons until the cluster is ready for them
   kubeconfig_remote_path = "/etc/kubernetes/admin.conf"
