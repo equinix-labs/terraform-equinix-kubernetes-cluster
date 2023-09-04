@@ -30,7 +30,7 @@ jobs:
         working-directory: ./examples/cpem-add-on
     steps:
       - name: Checkout from Github
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Add SHORT_SHA env property with commit short sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
