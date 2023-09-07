@@ -115,11 +115,11 @@ resource "null_resource" "kubeconfig" {
     null_resource.wait_for_cloud_init,
   ]
   provisioner "local-exec" {
-    command = join("", ["scp -o StrictHostKeyChecking=no -i ", local_sensitive_file.ssh_private_key_file[0].filename, " root@", equinix_metal_reserved_ip_block.k8s_cluster1_pool1_cp1.address, ":/etc/kubernetes/admin.conf files/kubeconfig.admin.yaml"])
+    command = join("", ["scp -o StrictHostKeyChecking=no -i ", local_sensitive_file.ssh_private_key_file[0].filename, " root@", equinix_metal_reserved_ip_block.k8s_cluster1_pool1_cp1.address, ":/etc/kubernetes/admin.conf kubeconfig.admin.yaml"])
   }
 
   provisioner "local-exec" {
-    command = "echo 'Cluster SSH Key: ${local_sensitive_file.ssh_private_key_file[0].filename}\nKubeconfig file: files/kubeconfig.admin.yaml'"
+    command = "echo 'Cluster SSH Key: ${local_sensitive_file.ssh_private_key_file[0].filename}\nKubeconfig file: kubeconfig.admin.yaml'"
 
   }
 
