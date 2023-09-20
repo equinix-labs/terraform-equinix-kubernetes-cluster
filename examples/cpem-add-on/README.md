@@ -40,8 +40,5 @@ No resources.
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_kubernetes_addons_outputs"></a> [kubernetes\_addons\_outputs](#output\_kubernetes\_addons\_outputs) | Outputs of the kubernetes\_addons module |
-| <a name="output_tfk8s_outputs"></a> [tfk8s\_outputs](#output\_tfk8s\_outputs) | Outputs of the tfk8s module |
+No outputs.
 <!-- END_TF_DOCS -->
