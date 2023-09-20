@@ -42,7 +42,7 @@ jobs:
         id: init
         run: terraform init -input=false
       - id: project
-        uses: equinix-labs/metal-project-action@v0.13.0
+        uses: equinix-labs/metal-project-action@v0.14.0
         env:
           METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
       - name: Terraform Vars - Cluster Name
