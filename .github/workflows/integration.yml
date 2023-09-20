@@ -42,9 +42,10 @@ jobs:
         id: init
         run: terraform init -input=false
       - id: project
-        uses: equinix-labs/metal-project-action@v0.13.0
-        env:
-          METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
+        uses: equinix-labs/metal-project-action@v0.14.0
+        with:
+          userToken: ${{ secrets.METAL_AUTH_TOKEN }}
+          enableBGP: true
       - name: Terraform Vars - Cluster Name
         run: echo "TF_VAR_cluster_name=tfacc-${SHORT_SHA}" >> $GITHUB_ENV
       - name: Terraform Vars - Project ID
@@ -64,6 +65,6 @@ jobs:
       - name: Project Delete
         if: ${{ always() }}
         uses: equinix-labs/metal-sweeper-action@v0.6.0
-        env:
-          METAL_PROJECT_ID: ${{ steps.project.outputs.projectID }}
-          METAL_AUTH_TOKEN: ${{ secrets.METAL_AUTH_TOKEN }}
+        with:
+          authToken: ${{ secrets.METAL_AUTH_TOKEN }}
+          projectID: ${{ steps.project.outputs.projectID }}
