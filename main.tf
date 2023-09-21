@@ -1,45 +1,45 @@
 locals {
-  cloud_config_cp_map = {
-    AUTH_TOKEN         = var.auth_token
+  cloud_config_map = {
+    AUTH_TOKEN         = var.metal_auth_token
     CPEM_VERSION       = var.cpem_version
     KUBE_VIP_VERSION   = var.kube_vip_version
     KUBERNETES_VERSION = var.kubernetes_version
-    PROJECT_ID         = var.project_id
+    PROJECT_ID         = var.metal_project_id
     VIP                = equinix_metal_reserved_ip_block.k8s_cluster1_pool1_cp1.address
   }
 }
 resource "equinix_metal_device" "k8s_cluster1_pool1_cp1" {
-  hostname         = "k8s-cluster1-pool1-cp1"
-  plan             = "m3.small.x86"
-  metro            = var.metro
-  operating_system = "ubuntu_20_04"
-  billing_cycle    = "hourly"
-  project_id       = var.project_id
-  user_data        = templatefile("${path.module}/templates/cloud-config-cp-init.tftpl", local.cloud_config_cp_map)
-  tags             = ["k8s-cluster-cluster1", "k8s-nodepool-pool1"]
+  hostname         = "${var.k8s_cluster_cp_hostname}-1"
+  plan             = var.k8s_cluster_cp_plan
+  metro            = var.metal_metro
+  operating_system = var.k8s_cluster_cp_os
+  billing_cycle    = var.k8s_cluster_cp_billing_cycle
+  project_id       = var.metal_project_id
+  user_data        = templatefile("${path.module}/templates/cloud-config-cp-init.tftpl", local.cloud_config_map)
+  tags             = var.tags
 }
 
 resource "equinix_metal_device" "k8s_cluster1_pool1_cpx" {
   count            = var.cp_ha == true ? 2 : 0
-  hostname         = "k8s-cluster1-pool1-cp${count.index + 2}"
-  plan             = "m3.small.x86"
-  metro            = var.metro
-  operating_system = "ubuntu_20_04"
-  billing_cycle    = "hourly"
-  project_id       = var.project_id
-  user_data        = templatefile("${path.module}/templates/cloud-config-cp-join.tftpl", local.cloud_config_cp_map)
-  tags             = ["k8s-cluster-cluster1", "k8s-nodepool-pool1"]
+  hostname         = "${var.k8s_cluster_cp_hostname}-${count.index + 2}"
+  plan             = var.k8s_cluster_cp_plan
+  metro            = var.metal_metro
+  operating_system = var.k8s_cluster_cp_os
+  billing_cycle    = var.k8s_cluster_cp_billing_cycle
+  project_id       = var.metal_project_id
+  user_data        = templatefile("${path.module}/templates/cloud-config-cp-join.tftpl", local.cloud_config_map)
+  tags             = var.tags
 }
 resource "equinix_metal_device" "k8s_cluster1_pool1_workerx" {
-  count            = var.worker_count
-  hostname         = "k8s-cluster1-pool1-worker${count.index + 1}"
-  plan             = "m3.small.x86"
-  metro            = var.metro
-  operating_system = "ubuntu_20_04"
-  billing_cycle    = "hourly"
-  project_id       = var.project_id
-  user_data        = templatefile("${path.module}/templates/cloud-config-worker.tftpl", local.cloud_config_cp_map)
-  tags             = ["k8s-cluster-cluster1", "k8s-nodepool-pool1"]
+  count            = var.worker_host_count
+  hostname         = "${var.k8s_cluster_worker_hostname}-${count.index + 1}"
+  plan             = var.k8s_cluster_worker_plan
+  metro            = var.metal_metro
+  operating_system = var.k8s_cluster_worker_os
+  billing_cycle    = var.k8s_cluster_worker_billing_cycle
+  project_id       = var.metal_project_id
+  user_data        = templatefile("${path.module}/templates/cloud-config-worker.tftpl", local.cloud_config_map)
+  tags             = var.tags
 }
 
 resource "equinix_metal_bgp_session" "k8s_cluster1_pool1_cp1" {
@@ -65,8 +65,8 @@ resource "equinix_metal_port" "k8s_cpx" {
 }
 
 resource "equinix_metal_reserved_ip_block" "k8s_cluster1_pool1_cp1" {
-  project_id = var.project_id
-  metro      = var.metro
+  project_id = var.metal_project_id
+  metro      = var.metal_metro
   quantity   = 1
 }
 
@@ -78,7 +78,7 @@ resource "tls_private_key" "ssh_key_pair" {
 resource "equinix_metal_project_ssh_key" "ssh_key_pair" {
   count      = var.ssh_private_key_path == "" ? 1 : 0
   name       = "ssh_key_pair"
-  project_id = var.project_id
+  project_id = var.metal_project_id
   public_key = tls_private_key.ssh_key_pair[count.index].public_key_openssh
 }
 resource "local_sensitive_file" "ssh_private_key_file" {

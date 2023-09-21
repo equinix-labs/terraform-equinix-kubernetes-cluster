@@ -1,10 +1,10 @@
-variable "project_id" {
+variable "metal_project_id" {
   description = "Equinix project ID"
   sensitive   = true
   type        = string
 }
 
-variable "auth_token" {
+variable "metal_auth_token" {
   description = "Equinix provider user auth token"
   sensitive   = true
   type        = string
@@ -16,7 +16,7 @@ variable "cpem_version" {
   default     = "v3.6.2"
 }
 
-variable "metro" {
+variable "metal_metro" {
   description = "Metro of choice"
   type        = string
   default     = "da"
@@ -47,7 +47,7 @@ variable "cp_ha" {
   default     = true
 }
 
-variable "worker_count" {
+variable "worker_host_count" {
   description = "Number of worker nodes"
   type        = number
   default     = 1
