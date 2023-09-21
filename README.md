@@ -105,7 +105,9 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cloud_init_done"></a> [cloud\_init\_done](#output\_cloud\_init\_done) | This ID will be set when the `cloud-init --wait` command exits |
 | <a name="output_kubeapi_vip"></a> [kubeapi\_vip](#output\_kubeapi\_vip) | KubeVip IP Address |
+| <a name="output_kubeconfig_ready"></a> [kubeconfig\_ready](#output\_kubeconfig\_ready) | This ID will be set when the kubeconfig has been copied to the local machine |
 | <a name="output_ssh_key_pair"></a> [ssh\_key\_pair](#output\_ssh\_key\_pair) | SSH Key pair |
 <!-- END_TF_DOCS -->
 ## Contributing
