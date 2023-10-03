@@ -1,0 +1,8 @@
+auth_token           = "ofFK1WFwZnQ2BATs73jy5wF2BsNxMTQT" #This must be a user API token
+project_id           = "da4dfb3b-d478-4f38-a9d9-dd877f97255a"
+ssh_private_key_path = ""
+cpem_version         = "v3.5.0"
+kube_vip_version     = "v0.5.9"
+kubernetes_version   = "v1.26.1"
+metro                = "da"
+flannel_version      = ""

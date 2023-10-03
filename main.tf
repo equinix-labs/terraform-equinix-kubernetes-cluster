@@ -120,7 +120,5 @@ resource "null_resource" "kubeconfig" {
 
   provisioner "local-exec" {
     command = "echo 'Cluster SSH Key: ${local_sensitive_file.ssh_private_key_file[0].filename}\nKubeconfig file: kubeconfig.admin.yaml'"
-
   }
-
 }
