@@ -12,6 +12,10 @@ module "tfk8s" {
   metro              = var.metro
 }
 
+provider "equinix" {
+  auth_token = var.auth_token
+}
+
 resource "null_resource" "install_cni_flannel" {
   depends_on = [
     module.tfk8s

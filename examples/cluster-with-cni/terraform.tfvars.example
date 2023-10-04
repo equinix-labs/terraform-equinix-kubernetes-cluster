@@ -1,0 +1,10 @@
+# This must be a user API token
+auth_token           = "YOUR_AUTH_TOKEN_HERE"
+project_id           = "YOUR_PROJECT_TOKEN_HERE"
+# Optional, where you want to store your SSH key
+ssh_private_key_path = ""
+kube_vip_version     = "v0.6.2"
+kubernetes_version   = "v1.28.1"
+metro                = "da"
+# Optional, choose a specific flannel version, leave blank for latest
+flannel_version      = ""
