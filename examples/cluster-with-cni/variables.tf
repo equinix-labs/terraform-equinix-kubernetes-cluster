@@ -1,10 +1,10 @@
-variable "project_id" {
+variable "metal_project_id" {
   description = "Equinix project ID"
   sensitive   = true
   type        = string
 }
 
-variable "auth_token" {
+variable "metal_auth_token" {
   description = "Equinix provider user auth token"
   sensitive   = true
   type        = string
@@ -23,7 +23,7 @@ variable "kube_vip_version" {
 }
 
 variable "kubernetes_version" {
-  description = "Kubernetes version. See https://www.downloadkubernetes.com/"
+  description = "Kubernetes version. See https://kubernetes.io/releases/patch-releases/#detailed-release-history-for-active-branches"
   type        = string
   default     = "v1.27.5"
 }
@@ -49,6 +49,12 @@ variable "worker_count" {
 
 variable "flannel_version" {
   description = "Version for installing Flannel CNI"
-  type = string
-  default = "latest"
+  type        = string
+  default     = "latest"
+}
+
+variable "cloud_provider_external" {
+  description = "Toggle to enable name of the cloud provider to be passed to kubeadm. Ex: --cloud-provider='external'"
+  type        = bool
+  default = true
 }

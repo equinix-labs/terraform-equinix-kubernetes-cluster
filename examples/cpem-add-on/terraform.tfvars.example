@@ -1,5 +1,5 @@
-auth_token           = "your_token_here" #This must be a user API token
-project_id           = "your_project_id"
+metal_auth_token           = "your_token_here" #This must be a user API token
+metal_project_id           = "your_project_id"
 ssh_private_key_path = "path_to_your_private_ssh_key"
 cpem_version         = "v3.5.0"
 kube_vip_version     = "v0.5.9"

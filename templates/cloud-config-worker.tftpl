@@ -12,14 +12,16 @@ write_files:
     net.bridge.bridge-nf-call-ip6tables = 1
   path: /etc/sysctl.d/99-kubernetes-cri.conf
 - content: |
-    KUBELET_EXTRA_ARGS=--node-ip={{ ds.meta_data.local_ipv4 }} --cloud-provider=external
+    KUBELET_EXTRA_ARGS=--node-ip={{ ds.meta_data.local_ipv4 }} %{ if CLOUD_PROVIDER_EXTERNAL == true } --cloud-provider=external %{ endif }
   path: /etc/default/kubelet
 - content: |
     apiVersion: kubeadm.k8s.io/v1beta3
     kind: JoinConfiguration
     nodeRegistration:
+    %{ if CLOUD_PROVIDER_EXTERNAL == true }
       kubeletExtraArgs:
         cloud-provider: "external"
+    %{ endif }
       taints: null
     discovery:
       bootstrapToken:

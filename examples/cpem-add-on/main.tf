@@ -10,6 +10,7 @@ module "tfk8s" {
   cp_ha              = var.cp_ha
   worker_host_count  = var.worker_host_count
   metal_metro        = var.metal_metro
+  cloud_provider_external     = ""
 }
 
 provider "equinix" {

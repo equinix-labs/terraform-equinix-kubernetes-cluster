@@ -6,6 +6,7 @@ locals {
     KUBERNETES_VERSION = var.kubernetes_version
     PROJECT_ID         = var.metal_project_id
     VIP                = equinix_metal_reserved_ip_block.k8s_cluster1_pool1_cp1.address
+    CLOUD_PROVIDER_EXTERNAL = var.cloud_provider_external
   }
 }
 resource "equinix_metal_device" "k8s_cluster1_pool1_cp1" {

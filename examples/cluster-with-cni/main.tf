@@ -3,17 +3,14 @@ module "tfk8s" {
   # source  = "equinix-labs/terraform-equinix-kubernetes-cluster?"
   # version = "0.0.1" # Use the latest version, according to https://github.com/equinix-labs/terraform-equinix-kubernetes-cluster/releases
 
-  auth_token         = var.auth_token
+  metal_auth_token   = var.metal_auth_token
   kube_vip_version   = var.kube_vip_version
   kubernetes_version = var.kubernetes_version
-  project_id         = var.project_id
+  metal_project_id   = var.metal_project_id
   cp_ha              = var.cp_ha
   worker_count       = var.worker_count
   metro              = var.metro
-}
-
-provider "equinix" {
-  auth_token = var.auth_token
+  cloud_provider_external     = var.cloud_provider_external
 }
 
 resource "null_resource" "install_cni_flannel" {
