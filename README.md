@@ -30,10 +30,11 @@ Configure pre-commit: `pre-commit install`.
 
 Run `terraform init -upgrade` and `terraform apply`.
 
-#### Note
+### Note
+
 This module will install a running cluster using kubeadm but the user needs to install a CNI manually.
 
-Refer [this](examples/cluster-with-cni) example to install cluster with a CNI by default in 
+Refer [this](examples/cluster-with-cni) example to install cluster with a CNI by default
 
 ## Module Documentation
 

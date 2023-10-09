@@ -108,9 +108,9 @@ variable "k8s_cluster_worker_os" {
 }
 
 variable "k8s_cluster_worker_billing_cycle" {
-description = "Billing Cycle of the nodes in the worker cluster"
-type = string
-default = "hourly"
+  description = "Billing Cycle of the nodes in the worker cluster"
+  type        = string
+  default     = "hourly"
 }
 variable "cloud_provider_external" {
   description = "Toggle to enable name of the cloud provider to be passed to kubeadm. Ex: --cloud-provider='external'"

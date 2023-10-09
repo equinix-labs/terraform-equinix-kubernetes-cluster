@@ -1,11 +1,11 @@
 locals {
   cloud_config_map = {
-    AUTH_TOKEN         = var.metal_auth_token
-    CPEM_VERSION       = var.cpem_version
-    KUBE_VIP_VERSION   = var.kube_vip_version
-    KUBERNETES_VERSION = var.kubernetes_version
-    PROJECT_ID         = var.metal_project_id
-    VIP                = equinix_metal_reserved_ip_block.k8s_cluster1_pool1_cp1.address
+    AUTH_TOKEN              = var.metal_auth_token
+    CPEM_VERSION            = var.cpem_version
+    KUBE_VIP_VERSION        = var.kube_vip_version
+    KUBERNETES_VERSION      = var.kubernetes_version
+    PROJECT_ID              = var.metal_project_id
+    VIP                     = equinix_metal_reserved_ip_block.k8s_cluster1_pool1_cp1.address
     CLOUD_PROVIDER_EXTERNAL = var.cloud_provider_external
   }
 }
@@ -31,6 +31,7 @@ resource "equinix_metal_device" "k8s_cluster1_pool1_cpx" {
   user_data        = templatefile("${path.module}/templates/cloud-config-cp-join.tftpl", local.cloud_config_map)
   tags             = var.tags
 }
+
 resource "equinix_metal_device" "k8s_cluster1_pool1_workerx" {
   count            = var.worker_host_count
   hostname         = "${var.k8s_cluster_worker_hostname}-${count.index + 1}"

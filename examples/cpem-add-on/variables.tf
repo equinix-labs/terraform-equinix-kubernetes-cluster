@@ -52,3 +52,9 @@ variable "worker_host_count" {
   type        = number
   default     = 1
 }
+
+variable "cloud_provider_external" {
+  description = "Toggle to enable cloud provider to be passed to kubeadm as 'external'. Ex: --cloud-provider='external'"
+  type        = bool
+  default     = true
+}

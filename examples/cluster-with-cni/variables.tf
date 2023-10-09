@@ -10,7 +10,7 @@ variable "metal_auth_token" {
   type        = string
 }
 
-variable "metro" {
+variable "metal_metro" {
   description = "Metro of choice"
   type        = string
   default     = "da"
@@ -28,20 +28,14 @@ variable "kubernetes_version" {
   default     = "v1.27.5"
 }
 
-variable "ssh_private_key_path" {
-  description = "Path of the private key used to SSH into cluster nodes"
-  sensitive   = true
-  type        = string
-  default     = ""
-}
-
 variable "cp_ha" {
   description = "Whether to enable HA in Kubernetes control plane nodes"
   type        = bool
   default     = true
 }
 
-variable "worker_count" {
+# Worker hosts vars
+variable "worker_host_count" {
   description = "Number of worker nodes"
   type        = number
   default     = 1
@@ -54,7 +48,7 @@ variable "flannel_version" {
 }
 
 variable "cloud_provider_external" {
-  description = "Toggle to enable name of the cloud provider to be passed to kubeadm. Ex: --cloud-provider='external'"
+  description = "Toggle to enable cloud provider to be passed to kubeadm as 'external'. Ex: --cloud-provider='external'"
   type        = bool
-  default = true
+  default     = true
 }
