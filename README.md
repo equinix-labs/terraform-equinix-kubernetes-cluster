@@ -60,7 +60,7 @@ To view examples for how you can leverage this module, please see the [examples]
 
 | Name | Version |
 |------|---------|
-| <a name="provider_equinix"></a> [equinix](#provider\_equinix) | 1.14.7 |
+| <a name="provider_equinix"></a> [equinix](#provider\_equinix) | ~> 1.14.0 |
 | <a name="provider_local"></a> [local](#provider\_local) | 2.4.0 |
 | <a name="provider_null"></a> [null](#provider\_null) | 3.2.1 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.4 |
@@ -77,7 +77,7 @@ No modules.
 | [equinix_metal_bgp_session.k8s_cluster1_pool1_cpx](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_bgp_session) | resource |
 | [equinix_metal_device.k8s_cluster1_pool1_cp1](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_device) | resource |
 | [equinix_metal_device.k8s_cluster1_pool1_cpx](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_device) | resource |
-| [equinix_metal_device.k8s_cluster1_pool1_dpx](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_device) | resource |
+| [equinix_metal_device.k8s_cluster1_pool1_workerx](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_device) | resource |
 | [equinix_metal_port.k8s_cp1](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_port) | resource |
 | [equinix_metal_port.k8s_cpx](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_port) | resource |
 | [equinix_metal_project_ssh_key.ssh_key_pair](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_project_ssh_key) | resource |
@@ -91,24 +91,24 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_metal_auth_token"></a> [metal\_auth\_token](#input\_metal\_auth\_token) | Equinix provider user auth token | `string` | n/a | yes |
+| <a name="input_metal_project_id"></a> [metal\_project\_id](#input\_metal\_project\_id) | Equinix project ID | `string` | n/a | yes |
 | <a name="input_cp_ha"></a> [cp\_ha](#input\_cp\_ha) | Whether to enable HA in Kubernetes control plane nodes | `bool` | `true` | no |
 | <a name="input_cpem_version"></a> [cpem\_version](#input\_cpem\_version) | Version of the CPEM | `string` | `"v3.6.2"` | no |
-| <a name="input_dp_host_count"></a> [dp\_host\_count](#input\_dp\_host\_count) | Number of worker nodes | `number` | `1` | no |
 | <a name="input_k8s_cluster_cp_billing_cycle"></a> [k8s\_cluster\_cp\_billing\_cycle](#input\_k8s\_cluster\_cp\_billing\_cycle) | Billing Cycle of the nodes in the control plane cluster | `string` | `"hourly"` | no |
 | <a name="input_k8s_cluster_cp_hostname"></a> [k8s\_cluster\_cp\_hostname](#input\_k8s\_cluster\_cp\_hostname) | Hostname of each node in the control plane cluster | `string` | `"k8s-cluster1-pool1-cp"` | no |
 | <a name="input_k8s_cluster_cp_os"></a> [k8s\_cluster\_cp\_os](#input\_k8s\_cluster\_cp\_os) | OS of the nodes in the control plane cluster | `string` | `"ubuntu_20_04"` | no |
 | <a name="input_k8s_cluster_cp_plan"></a> [k8s\_cluster\_cp\_plan](#input\_k8s\_cluster\_cp\_plan) | Plan of the nodes in the control plane cluster | `string` | `"m3.small.x86"` | no |
-| <a name="input_k8s_cluster_dp_billing_cycle"></a> [k8s\_cluster\_dp\_billing\_cycle](#input\_k8s\_cluster\_dp\_billing\_cycle) | Billing Cycle of the nodes in the data plane cluster | `string` | `"hourly"` | no |
-| <a name="input_k8s_cluster_dp_hostname"></a> [k8s\_cluster\_dp\_hostname](#input\_k8s\_cluster\_dp\_hostname) | Hostname of each node in the data plane cluster | `string` | `"k8s-cluster1-pool1-dp"` | no |
-| <a name="input_k8s_cluster_dp_os"></a> [k8s\_cluster\_dp\_os](#input\_k8s\_cluster\_dp\_os) | OS of the nodes in the data plane cluster | `string` | `"ubuntu_20_04"` | no |
-| <a name="input_k8s_cluster_dp_plan"></a> [k8s\_cluster\_dp\_plan](#input\_k8s\_cluster\_dp\_plan) | Plan of the nodes in the data plane cluster | `string` | `"m3.small.x86"` | no |
+| <a name="input_k8s_cluster_worker_billing_cycle"></a> [k8s\_cluster\_worker\_billing\_cycle](#input\_k8s\_cluster\_worker\_billing\_cycle) | Billing Cycle of the nodes in the worker cluster | `string` | `"hourly"` | no |
+| <a name="input_k8s_cluster_worker_hostname"></a> [k8s\_cluster\_worker\_hostname](#input\_k8s\_cluster\_worker\_hostname) | Hostname of each node in the worker cluster | `string` | `"k8s-cluster1-pool1-worker"` | no |
+| <a name="input_k8s_cluster_worker_os"></a> [k8s\_cluster\_worker\_os](#input\_k8s\_cluster\_worker\_os) | OS of the nodes in the worker cluster | `string` | `"ubuntu_20_04"` | no |
+| <a name="input_k8s_cluster_worker_plan"></a> [k8s\_cluster\_worker\_plan](#input\_k8s\_cluster\_worker\_plan) | Plan of the nodes in the worker cluster | `string` | `"m3.small.x86"` | no |
 | <a name="input_kube_vip_version"></a> [kube\_vip\_version](#input\_kube\_vip\_version) | KubeVip version of choice | `string` | `"v0.6.2"` | no |
 | <a name="input_kubernetes_version"></a> [kubernetes\_version](#input\_kubernetes\_version) | Kubernetes version. See https://www.downloadkubernetes.com/ | `string` | `"v1.27.5"` | no |
-| <a name="input_metal_auth_token"></a> [metal\_auth\_token](#input\_metal\_auth\_token) | Equinix provider user auth token | `string` | n/a | yes |
 | <a name="input_metal_metro"></a> [metal\_metro](#input\_metal\_metro) | Metro of choice | `string` | `"da"` | no |
-| <a name="input_metal_project_id"></a> [metal\_project\_id](#input\_metal\_project\_id) | Equinix project ID | `string` | n/a | yes |
 | <a name="input_ssh_private_key_path"></a> [ssh\_private\_key\_path](#input\_ssh\_private\_key\_path) | Path of the private key used to SSH into cluster nodes | `string` | `""` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | String list of common tags for Equinix resources | `list(any)` | <pre>[<br>  "k8s-cluster-cluster1",<br>  "k8s-nodepool-pool1"<br>]</pre> | no |
+| <a name="input_worker_host_count"></a> [worker\_host\_count](#input\_worker\_host\_count) | Number of worker nodes | `number` | `1` | no |
 
 ## Outputs
 
