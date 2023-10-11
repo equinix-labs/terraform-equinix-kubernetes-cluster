@@ -30,6 +30,12 @@ Configure pre-commit: `pre-commit install`.
 
 Run `terraform init -upgrade` and `terraform apply`.
 
+### Note
+
+This module will install a running cluster using kubeadm but the user needs to install a CNI manually.
+
+Refer [this](examples/cluster-with-cni) example to install cluster with a CNI by default
+
 ## Module Documentation
 
 The main README.md, the modules README.md and the examples README.md are populated by [terraform-docs worflow job](.github/workflows/documentation.yaml). The following sections are appended between the terraform-docs delimeters: Requiremenents, Providers, Modules, Resources, Inputs, and Outputs.

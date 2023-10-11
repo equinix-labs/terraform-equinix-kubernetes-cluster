@@ -10,12 +10,6 @@ variable "metal_auth_token" {
   type        = string
 }
 
-variable "cpem_version" {
-  description = "Version of the CPEM"
-  type        = string
-  default     = "v3.6.2"
-}
-
 variable "metal_metro" {
   description = "Metro of choice"
   type        = string
@@ -29,16 +23,9 @@ variable "kube_vip_version" {
 }
 
 variable "kubernetes_version" {
-  description = "Kubernetes version. See https://www.downloadkubernetes.com/"
+  description = "Kubernetes version. See https://kubernetes.io/releases/patch-releases/#detailed-release-history-for-active-branches"
   type        = string
   default     = "v1.27.5"
-}
-
-variable "ssh_private_key_path" {
-  description = "Path of the private key used to SSH into cluster nodes"
-  sensitive   = true
-  type        = string
-  default     = ""
 }
 
 variable "cp_ha" {
@@ -47,10 +34,17 @@ variable "cp_ha" {
   default     = true
 }
 
+# Worker hosts vars
 variable "worker_host_count" {
   description = "Number of worker nodes"
   type        = number
   default     = 1
+}
+
+variable "flannel_version" {
+  description = "Version for installing Flannel CNI"
+  type        = string
+  default     = "latest"
 }
 
 variable "cloud_provider_external" {

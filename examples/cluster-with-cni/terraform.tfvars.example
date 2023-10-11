@@ -1,0 +1,11 @@
+# This must be a user API token
+metal_auth_token           = "YOUR_AUTH_TOKEN_HERE"
+metal_project_id           = "YOUR_PROJECT_TOKEN_HERE"
+# Optional, where you want to store your SSH key
+kube_vip_version     = "v0.6.2"
+kubernetes_version   = "v1.28.1"
+metal_metro                = "da"
+# Optional, choose a specific flannel version, leave blank for latest
+flannel_version      = ""
+# Optional, name of a specific cloud provider. Possible values: external, YOUR_CLOUD_PROVIDER, "" (empty for internal cloud controller)
+cloud_provider_external       = false

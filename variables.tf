@@ -112,3 +112,8 @@ variable "k8s_cluster_worker_billing_cycle" {
   type        = string
   default     = "hourly"
 }
+variable "cloud_provider_external" {
+  description = "Toggle to enable name of the cloud provider to be passed to kubeadm. Ex: --cloud-provider='external'"
+  type        = bool
+  default     = true
+}
