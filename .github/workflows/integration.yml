@@ -42,7 +42,7 @@ jobs:
         id: init
         run: terraform init -input=false
       - id: project
-        uses: equinix-labs/metal-project-action@v0.14.0
+        uses: equinix-labs/metal-project-action@v0.14.1
         with:
           userToken: ${{ secrets.METAL_AUTH_TOKEN }}
           enableBGP: true
