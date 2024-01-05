@@ -58,8 +58,8 @@ To view examples for how you can leverage this module, please see the [examples]
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
 | <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 1.14.0 |
-| <a name="requirement_local"></a> [local](#requirement\_local) | 2.4.0 |
-| <a name="requirement_null"></a> [null](#requirement\_null) | 3.2.1 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | 2.4.1 |
+| <a name="requirement_null"></a> [null](#requirement\_null) | 3.2.2 |
 | <a name="requirement_tls"></a> [tls](#requirement\_tls) | 4.0.5 |
 
 ## Providers
@@ -67,8 +67,8 @@ To view examples for how you can leverage this module, please see the [examples]
 | Name | Version |
 |------|---------|
 | <a name="provider_equinix"></a> [equinix](#provider\_equinix) | ~> 1.14.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | 2.4.0 |
-| <a name="provider_null"></a> [null](#provider\_null) | 3.2.1 |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.4.1 |
+| <a name="provider_null"></a> [null](#provider\_null) | 3.2.2 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.5 |
 
 ## Modules
@@ -88,9 +88,9 @@ No modules.
 | [equinix_metal_port.k8s_cpx](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_port) | resource |
 | [equinix_metal_project_ssh_key.ssh_key_pair](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_project_ssh_key) | resource |
 | [equinix_metal_reserved_ip_block.k8s_cluster1_pool1_cp1](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/metal_reserved_ip_block) | resource |
-| [local_sensitive_file.ssh_private_key_file](https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/resources/sensitive_file) | resource |
-| [null_resource.kubeconfig](https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs/resources/resource) | resource |
-| [null_resource.wait_for_cloud_init](https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs/resources/resource) | resource |
+| [local_sensitive_file.ssh_private_key_file](https://registry.terraform.io/providers/hashicorp/local/2.4.1/docs/resources/sensitive_file) | resource |
+| [null_resource.kubeconfig](https://registry.terraform.io/providers/hashicorp/null/3.2.2/docs/resources/resource) | resource |
+| [null_resource.wait_for_cloud_init](https://registry.terraform.io/providers/hashicorp/null/3.2.2/docs/resources/resource) | resource |
 | [tls_private_key.ssh_key_pair](https://registry.terraform.io/providers/hashicorp/tls/4.0.5/docs/resources/private_key) | resource |
 
 ## Inputs
