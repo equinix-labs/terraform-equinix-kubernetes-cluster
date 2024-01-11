@@ -2,7 +2,7 @@ terraform {
   required_providers {
     equinix = {
       source  = "equinix/equinix"
-      version = "~> 1.14.0"
+      version = "~> 1.20.0"
     }
     tls = {
       source  = "hashicorp/tls"
