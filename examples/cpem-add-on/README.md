@@ -7,7 +7,7 @@ This is an example of how to utilize the root module with the [CPEM add-on](http
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 1.14.0 |
+| <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 1.20.0 |
 
 ## Providers
 
