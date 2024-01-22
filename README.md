@@ -30,11 +30,11 @@ Configure pre-commit: `pre-commit install`.
 
 Run `terraform init -upgrade` and `terraform apply`.
 
-### Note
+### Kubernetes Container Network Interface (CNI)
 
-This module will install a running cluster using kubeadm but the user needs to install a CNI manually.
+A Container Network Interface (CNI) plug-in is not installed by default in the root module. Even though this module will install a running cluster using kubeadm, it is recommended that users install a [CNI plug-in](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) to run applications.
 
-Refer [this](examples/cluster-with-cni) example to install cluster with a CNI by default
+[This](examples/cluster-with-cni) example will install [`flannel` CNI plug-in](https://github.com/flannel-io/flannel)
 
 ## Module Documentation
 
