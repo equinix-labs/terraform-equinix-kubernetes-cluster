@@ -22,6 +22,6 @@ resource "null_resource" "install_cni_flannel" {
     module.tfk8s
   ]
   provisioner "local-exec" {
-    command = "kubectl apply -f https://github.com/flannel-io/flannel/releases/${var.flannel_version}/download/kube-flannel.yml --kubeconfig kubeconfig.admin.yaml"
+    command = "kubectl apply -f https://github.com/flannel-io/flannel/releases/download/${var.flannel_version}/kube-flannel.yml --kubeconfig kubeconfig.admin.yaml"
   }
 }

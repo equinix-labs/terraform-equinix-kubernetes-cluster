@@ -44,7 +44,12 @@ variable "worker_host_count" {
 variable "flannel_version" {
   description = "Version for installing Flannel CNI"
   type        = string
-  default     = "latest"
+  default     = "v0.24.2"
+
+  validation {
+    condition     = length(var.flannel_version) > 0 && substr(var.flannel_version, 0, 1) == "v"
+    error_message = "The flannel_version variable must be set. It must also start with string \"v\"."
+  }
 }
 
 variable "cloud_provider_external" {
