@@ -5,7 +5,7 @@ metal_project_id           = "YOUR_PROJECT_TOKEN_HERE"
 kube_vip_version     = "v0.6.2"
 kubernetes_version   = "v1.28.1"
 metal_metro                = "da"
-# Optional, choose a specific flannel version, leave blank for latest
-flannel_version      = ""
+# Optional, choose a specific flannel version, default is v0.24.2
+# flannel_version      = "v0.24.2"
 # Optional, name of a specific cloud provider. Possible values: external, YOUR_CLOUD_PROVIDER, "" (empty for internal cloud controller)
 cloud_provider_external       = false
