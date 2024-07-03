@@ -19,7 +19,7 @@ provider "equinix" {
 
 module "kubernetes_addons" {
   source  = "equinix-labs/kubernetes-addons/equinix"
-  version = "0.4.0"
+  version = "0.5.0"
 
   ssh_user        = replace("root", module.tfk8s.kubeconfig_ready, "")
   ssh_private_key = var.ssh_private_key_path == "" ? join("\n", [chomp(module.tfk8s.ssh_key_pair[0].private_key_openssh), ""]) : chomp(file(var.ssh_private_key_path))
