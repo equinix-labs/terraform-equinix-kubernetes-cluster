@@ -7,7 +7,7 @@ This is an example of how to utilize the root module with the [CPEM add-on](http
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 1.20.0 |
+| <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 2.0.0 |
 
 ## Providers
 
@@ -17,7 +17,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_kubernetes_addons"></a> [kubernetes\_addons](#module\_kubernetes\_addons) | equinix-labs/kubernetes-addons/equinix | 0.4.0 |
+| <a name="module_kubernetes_addons"></a> [kubernetes\_addons](#module\_kubernetes\_addons) | equinix-labs/kubernetes-addons/equinix | 0.5.0 |
 | <a name="module_tfk8s"></a> [tfk8s](#module\_tfk8s) | ../.. | n/a |
 
 ## Resources
