@@ -57,7 +57,7 @@ To view examples for how you can leverage this module, please see the [examples]
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 1.20.0 |
+| <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 2.0.0 |
 | <a name="requirement_local"></a> [local](#requirement\_local) | 2.4.1 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | 3.2.2 |
 | <a name="requirement_tls"></a> [tls](#requirement\_tls) | 4.0.5 |
@@ -66,7 +66,7 @@ To view examples for how you can leverage this module, please see the [examples]
 
 | Name | Version |
 |------|---------|
-| <a name="provider_equinix"></a> [equinix](#provider\_equinix) | ~> 1.20.0 |
+| <a name="provider_equinix"></a> [equinix](#provider\_equinix) | ~> 2.0.0 |
 | <a name="provider_local"></a> [local](#provider\_local) | 2.4.1 |
 | <a name="provider_null"></a> [null](#provider\_null) | 3.2.2 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.5 |
