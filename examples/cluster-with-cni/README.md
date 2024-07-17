@@ -7,7 +7,7 @@ This is an example of how to make the cluster running installing [Flannel CNI](h
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 2.0.0 |
+| <a name="requirement_equinix"></a> [equinix](#requirement\_equinix) | ~> 2.0 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.2.2 |
 
 ## Providers
